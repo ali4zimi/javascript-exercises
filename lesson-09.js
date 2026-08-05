@@ -10,12 +10,20 @@
 // Log one sentence to the console, then log `document.title`, and confirm that both appear in
 // the DevTools Console rather than in a terminal. In a comment, state what the `defer`
 // attribute prevented.
+console.log("Hello");
+console.log(document.title);
 
+// The `defer` attribute prevented the script from running before the HTML document was fully parsed.
 
 // TODO: Part two.
 // Select the page's `h1` with `querySelector` and replace its `textContent` with a label name
 // of your choosing. Select the tagline by its class and change its text, then add the provided
 // highlight class to it through `classList`.
+
+document.querySelector("h1").textContent = "My Favorite Artists";
+const tagline = document.querySelector(".tagline");
+tagline.textContent = "A collection of my favorite music artists.";
+tagline.classList.add("highlight");
 
 
 // TODO: Part three.
@@ -33,18 +41,58 @@ const artists = [
   { name: "Johnny Cash", genre: "Country", total: "15:40" },
 ];
 
+const cardsContainer = document.querySelector(".cards");
+
+for (const artist of artists) {
+  const card = document.createElement("article");
+  card.innerHTML = `
+    <h3>${artist.name}</h3>
+    <p>${artist.genre} (${artist.total})</p>
+  `;
+  cardsContainer.appendChild(card);
+}
+
+
+createArtistCard(artists);
 
 // TODO: Part four.
 // Add a sixth artist object of your own invention to the array and reload. Confirm that the
 // sixth card exists, and state in a comment what you did not have to change, compared with the
 // five hand-copied cards this course opened on.
 
+const newArtist = { name: "Taylor Swift", genre: "Pop", total: "12:45" };
+artists.push(newArtist);
+
+// reusable function to create artist cards
+function createArtistCard(artists) {
+  const cardsContainer = document.querySelector(".cards");
+  // Clear existing cards
+  cardsContainer.innerHTML = "";
+  for (const artist of artists) {
+    const card = document.createElement("article");
+    card.innerHTML = `
+      <h3>${artist.name}</h3>
+      <p>${artist.genre} (${artist.total})</p>
+    `;
+    cardsContainer.appendChild(card);
+  }
+}
+
+createArtistCard(artists);
+
 
 // TODO: Part five.
 // The page provides a button with the shuffle class and an element with the featured class. On
 // click, pick a random artist using the random recipe with `Math.floor`, and write a featured
 // sentence into the featured element with a template literal.
+const shuffleButton = document.querySelector(".shuffle");
+const featuredElement = document.querySelector(".featured");
 
+shuffleButton.addEventListener("click", () => {
+  const randomIndex = Math.floor(Math.random() * artists.length);
+  const randomArtist = artists[randomIndex];
+  featuredElement.textContent = `This week's featured artist is: ${randomArtist.name}`;
+});
 
 // TODO: Part six.
 // The page provides a form with the signup class and a text input with the artist-name id. On
@@ -54,6 +102,19 @@ const artists = [
 // call. An empty submission does nothing; name in a comment which falsy value makes that check
 // work. As a stretch, clear the input by assigning it an empty string after each successful
 // addition.
+
+const signupForm = document.querySelector(".signup");
+signupForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const artistNameInput = document.getElementById("artist-name");
+  const artistName = artistNameInput.value.trim();
+  if (artistName) {
+    const newArtist = { name: artistName, genre: "Unknown", total: "0:00" };
+    artists.push(newArtist);
+    createArtistCard(artists);
+    artistNameInput.value = ""; // Clear the input after successful addition
+  }
+});
 
 
 // TODO: Save deliberately, commit with a clear message, push the branch, and open a pull request
