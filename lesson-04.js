@@ -12,16 +12,16 @@
 // misses, leaving both the prediction and the actual result visible.
 
 // * The provided expressions, write your prediction beside each before running:
-console.log(3 === "3"); // prediction:
-console.log(3 == "3"); // prediction:
-console.log("5" - 1); // prediction:
-console.log("5" + 1); // prediction:
-console.log(1 + true); // prediction:
-console.log(10 >= 10); // prediction:
-console.log(!(5 > 2)); // prediction:
-console.log(4 !== "4"); // prediction:
-console.log("b" > "a"); // prediction:
-console.log(0 === -0); // prediction:
+console.log(3 === "3"); // prediction: false --- result: false
+console.log(3 == "3"); // prediction: false --- result: true
+console.log("5" - 1); // prediction: 4 --- result: 4
+console.log("5" + 1); // prediction: 51 --- result: 51
+console.log(1 + true); // prediction: true --- result: 2
+console.log(10 >= 10); // prediction: true --- result: true
+console.log(!(5 > 2)); // prediction: false --- result: false
+console.log(4 !== "4"); // prediction: true --- result: true
+console.log("b" > "a"); // prediction: false --- result: true
+console.log(0 === -0); // prediction: true --- result: true
 
 
 // TODO: Part two.
@@ -29,12 +29,27 @@ console.log(0 === -0); // prediction:
 // twice with different values so that each branch has printed at least once, and record each
 // run's output in a comment.
 
+let value = 10;
+if (value > 5) {
+  console.log("Value is greater than 5");
+} else {
+  console.log("Value is 5 or less");
+}
+
 
 // TODO: Part three.
 // Build an `else if` chain for order pricing: more than 12 items produces one message, more
 // than 6 another, and everything else a third. Run it with values that reach every branch, and
 // add a comment explaining why the most specific question must be asked first.
 
+let orderQuantity = 8;
+if (orderQuantity > 12) {
+  console.log("You get a bulk discount!");
+} else if (orderQuantity > 6) {
+  console.log("You get a small discount!");
+} else {
+  console.log("No discount for you.");
+}
 
 // TODO: Part four.
 // For each of the eight provided values, which include `0`, `"0"`, an empty string, and a
@@ -43,6 +58,16 @@ console.log(0 === -0); // prediction:
 
 // * The eight provided values:
 const courtValues = [false, 0, "0", "", " ", "bread", null, undefined];
+
+console.log(Boolean(courtValues[0])); // prediction: false  ---  result: false
+console.log(Boolean(courtValues[1])); // prediction: false  ---  result: false
+console.log(Boolean(courtValues[2])); // prediction: true   ---  result: true
+console.log(Boolean(courtValues[3])); // prediction: false  ---  result: false
+console.log(Boolean(courtValues[4])); // prediction: true   ---  result: true
+console.log(Boolean(courtValues[5])); // prediction: true   ---  result: true
+console.log(Boolean(courtValues[6])); // prediction: false  ---  result: false
+console.log(Boolean(courtValues[7])); // prediction: false  ---  result: false
+
 
 
 // TODO: Part five.
@@ -61,6 +86,20 @@ if (day === "Saturday") {
   console.log("Open 7:00 to 18:00");
 }
 
+switch (day) {
+  case "Saturday":
+    console.log("Open 7:00 to 14:00");
+    break;
+  case "Sunday":
+    console.log("Open 8:00 to 12:00");
+    break;
+  case "Monday":
+    console.log("Closed today");
+    break;
+  default:
+    console.log("Open 7:00 to 18:00");
+}
+
 
 // TODO: Part six.
 // The file ends with a short broken program that contains an assignment where a comparison was
@@ -69,15 +108,17 @@ if (day === "Saturday") {
 
 // * The provided broken program, run it, observe both incorrect behaviors, then repair both:
 let shopStatus = "closed";
-if (shopStatus = "open") {
+if (shopStatus === "open") {
   console.log("Welcome in");
 }
 const size = "M";
 switch (size) {
   case "S":
     console.log("Small");
+    break;
   case "M":
     console.log("Medium");
+    break;
   case "L":
     console.log("Large");
     break;
@@ -94,6 +135,26 @@ switch (size) {
 // divisible by 3, Buzz when it is divisible by 5, FizzBuzz when it is divisible by both, and
 // the number itself otherwise. The loops lesson scales this to one hundred.
 
+// The Leap Year Checker
+let year = 1900;
+if ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)) {
+  console.log(year + " is a leap year.");
+} else {
+  console.log(year + " is not a leap year.");
+}
+
+
+// FizzBuzz for a single number
+let number = 15;
+if (number % 3 === 0 && number % 5 === 0) {
+  console.log("FizzBuzz");
+} else if (number % 3 === 0) {
+  console.log("Fizz");
+} else if (number % 5 === 0) {
+  console.log("Buzz");
+} else {
+  console.log(number);
+}
 
 // TODO: Save deliberately, commit with a clear message, push the branch, and open a pull request
 // into main.
