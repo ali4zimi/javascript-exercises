@@ -10,6 +10,23 @@
 // runtime, and a `describe` method that returns one sentence built from the instance's own
 // properties through `this`. Create two instances with `new` and log both descriptions.
 
+class Artist {
+  constructor(name, genre, total) {
+    this.name = name;
+    this.genre = genre;
+    this.total = total;
+  }
+
+  describe() {
+    return `${this.name} is a ${this.genre} artist with a total runtime of ${this.total}.`;
+  }
+}
+
+const artist1 = new Artist("Taylor Swift", "Pop", "15:30");
+const artist2 = new Artist("Ed Sheeran", "Pop", "12:45");
+
+console.log(artist1.describe());
+console.log(artist2.describe());
 
 // TODO: Part two.
 // The file provides the artists as an array of plain objects. Loop over it with `for...of`,
@@ -25,6 +42,17 @@ const artistData = [
   { name: "Johnny Cash", genre: "Country", total: "15:40" },
 ];
 
+const artists = [];
+
+for (const data of artistData) {
+  const artist = new Artist(data.name, data.genre, data.total);
+  artists.push(artist);
+}
+
+artists.forEach((artist) => {
+  console.log(artist.describe());
+});
+
 
 // TODO: Part three.
 // The file contains three short snippets: a class call that is missing `new`, an arrow
@@ -33,19 +61,35 @@ const artistData = [
 // leaving both prediction and result visible.
 
 // * Three snippets. Predict each outcome in a comment, then verify one at a time.
-// ! Snippet one, a class call missing new. Uncomment after part one, predict first:
-// const broken = Artist("Pinkfong", "Children's music", "11:31");
-// ! Snippet two, an arrow function used as a method that reads this:
-// const single = { title: "Hurt", artist: "Johnny Cash", describe: () => `${this.title} by ${this.artist}` };
-// console.log(single.describe());
+// ! Snippet one, a class call missing new. Uncomment after part one, 
+// predict first: a type error --- result: TypeError: Class constructor Artist cannot be invoked without 'new'
+const broken = new Artist("Pinkfong", "Children's music", "11:31"); 
+// ! Snippet two, an arrow function used as a method that reads this: prediction: undefined  --- result: undefined by undefined
+const single = { title: "Hurt", artist: "Johnny Cash", describe: () => `${this.title} by ${this.artist}` };
+console.log(single.describe());
 // * Snippet three, the correct call. Uncomment after part one:
-// console.log(new Artist("Asake", "Afrobeats", "14:08").describe());
+// It runs correctly and logs the description of the artist instance, but the new object is not stored in a variable. 
+console.log(new Artist("Asake", "Afrobeats", "14:08").describe());
 
 
 // TODO: Part four.
 // Write a `FeaturedArtist` class that extends `Artist`, adds a blurb property through a
 // constructor that calls `super` first, and overrides `describe` so that it builds on the
 // superclass version through `super.describe()`. Promote one artist and log the result.
+
+class FeaturedArtist extends Artist {
+  constructor(name, genre, total, blurb) {
+    super(name, genre, total);
+    this.blurb = blurb;
+  }
+
+  describe() {
+    return `${super.describe()} ${this.blurb}`;
+  }
+}
+
+const featuredArtist = new FeaturedArtist("Ed Sheeran", "Pop", "12:45", "He is a world-renowned singer-songwriter");
+console.log(featuredArtist.describe());
 
 
 // TODO: Part five.
@@ -55,16 +99,23 @@ const artistData = [
 // class.
 
 // * Working pre-2015 code, provided. Do not rewrite it, annotate it:
+// * Equivalent to: class ArtistOld { constructor(name, genre) { this.name = name; this.genre = genre; } }
 function ArtistOld(name, genre) {
   this.name = name;
   this.genre = genre;
 }
+// * Equivalent to: describe() { return `${this.name}, ${this.genre}`; }
 ArtistOld.prototype.describe = function () {
   return `${this.name}, ${this.genre}`;
 };
+// * Equivalent to: tag() { return `#${this.genre.toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}`; }
 ArtistOld.prototype.tag = function () {
   return `#${this.genre.toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}`;
 };
+
+const oldArtist = new ArtistOld("Johnny Cash", "Country");
+console.log(oldArtist.describe());
+console.log(oldArtist.tag());
 
 
 // TODO: Part six.
@@ -73,6 +124,29 @@ ArtistOld.prototype.tag = function () {
 // it returns. The `get` keyword from the extension is your alternative if getters caught your
 // interest.
 
+// * Stretch: static method named
+
+Artist.named = function (artists, name) {
+  return artists.find(artist => artist.name === name);
+}
+
+// Testing the static method
+const foundArtist = Artist.named(artists, "Asake");
+if (foundArtist) {
+  console.log(foundArtist.describe());
+}
+
+// Alternative using a getter (if desired)
+class ArtistWithGetter extends Artist {
+  static get named() {
+    return (artists, name) => artists.find(artist => artist.name === name);
+  }
+}
+
+const foundArtistWithGetter = ArtistWithGetter.named(artists, "Asake");
+if (foundArtistWithGetter) {
+  console.log(foundArtistWithGetter.describe());
+}
 
 // TODO: Save deliberately, commit with a clear message, push the branch, and open a pull request
 // into main.
